@@ -3,73 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Story Generator</title>
+    <title>Trend-Based Story Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Generate a Trending Story</h1>
-    <form id="story-form">
-        <label for="trend_source">Select Trend Source:</label>
-        <select name="trend_source" id="trend_source">
-            <option value="google_trends">Google Trends</option>
-            <option value="tiktok_api">TikTok API</option>
-            <option value="reddit_api">Reddit API</option>
-        </select>
+    <!-- Header -->
+    <header>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="App Logo" class="logo">
+        <h1>Trend-Based Story Generator</h1>
+    </header>
 
-        <label for="genre">Genre:</label>
-        <select name="genre" id="genre">
-            <option value="Comedy">Comedy</option>
-            <option value="Horror">Horror</option>
-            <option value="Motivational">Motivational</option>
-            <option value="Mystery">Mystery</option>
-        </select>
+    <!-- Main Content -->
+    <main>
+        <section class="story-options">
+            <h2>Customize Your Story</h2>
+            <!-- Trend Source -->
+            <label for="trend-source">Select Trend Source:</label>
+            <select id="trend-source">
+                <option>Google Trends</option>
+                <option>TikTok API</option>
+                <option>Reddit API</option>
+            </select>
 
-        <label for="tone">Tone:</label>
-        <select name="tone" id="tone">
-            <option value="Lighthearted">Lighthearted</option>
-            <option value="Dark">Dark</option>
-            <option value="Inspirational">Inspirational</option>
-        </select>
+            <!-- Genre -->
+            <label for="genre">Choose Genre:</label>
+            <select id="genre">
+                <option>Comedy</option>
+                <option>Horror</option>
+                <option>Motivational</option>
+                <option>Mystery</option>
+            </select>
 
-        <label for="time_period">Time Period:</label>
-        <select name="time_period" id="time_period">
-            <option value="Past">Past</option>
-            <option value="Present">Present</option>
-            <option value="Future">Future</option>
-        </select>
+            <!-- Tone -->
+            <label for="tone">Select Tone:</label>
+            <select id="tone">
+                <option>Lighthearted</option>
+                <option>Dark</option>
+                <option>Inspirational</option>
+            </select>
 
-        <label for="duration">Story Duration:</label>
-        <select name="duration" id="duration">
-            <option value="30 seconds">30 Seconds</option>
-            <option value="1 minute">1 Minute</option>
-        </select>
+            <!-- Time Period -->
+            <label for="time-period">Time Period:</label>
+            <select id="time-period">
+                <option>Past</option>
+                <option>Present</option>
+                <option>Future</option>
+            </select>
 
-        <button type="button" onclick="generateStory()">Generate Story</button>
-    </form>
+            <!-- Duration -->
+            <label for="duration">Story Duration:</label>
+            <select id="duration">
+                <option value="15">15 seconds</option>
+                <option value="30">30 seconds</option>
+                <option value="60">1 minute</option>
+            </select>
 
-       <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+            <!-- Hashtag Option -->
+            <label for="hashtags">Include Hashtags:</label>
+            <input type="checkbox" id="hashtags" checked>
 
-    <h2>Generated Story:</h2>
-    <p id="generated-story">Your story will appear here...</p>
+            <!-- Generate Button -->
+            <button id="generate-btn">Generate Story</button>
+        </section>
 
-    <script>
-        function generateStory() {
-            const formData = new FormData(document.getElementById("story-form"));
+        <!-- Story Display -->
+        <section id="story-result" class="story-result">
+            <h2>Your Generated Story</h2>
+            <div id="story-content"></div>
+        </section>
+    </main>
 
-            fetch("/generate", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("generated-story").innerText = 
-                    `Trend: ${data.trend}\n\n${data.script}`;
-            })
-            .catch(error => {
-                document.getElementById("generated-story").innerText = 
-                    "Error generating story. Please try again.";
-                console.error("Error:", error);
-            });
-        }
-    </script>
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
