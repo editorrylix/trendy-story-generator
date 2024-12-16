@@ -5,6 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trend-Based Story Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* Minimalist Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #0078d4;
+            color: #fff;
+        }
+
+        header .logo {
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #0078d4;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #0078d4;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #005ea8;
+        }
+
+        .story-result {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .story-result h2 {
+            font-size: 1.5rem;
+            color: #0078d4;
+            margin-bottom: 1rem;
+        }
+
+        #story-content {
+            white-space: pre-wrap;
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -15,67 +122,106 @@
 
     <!-- Main Content -->
     <main>
-        <section class="story-options">
+        <!-- Story Options Form -->
+        <div class="form-container">
             <h2>Customize Your Story</h2>
-            <form id="story-form">
-                <!-- Trend Source -->
-                <label for="trend-source">Select Trend Source:</label>
-                <select id="trend-source" name="trendSource" required>
-                    <option value="google_trends">Google Trends</option>
-                    <option value="tiktok_api">TikTok API</option>
-                    <option value="reddit_api">Reddit API</option>
-                </select>
 
-                <!-- Genre -->
-                <label for="genre">Choose Genre:</label>
-                <select id="genre" name="genre" required>
-                    <option value="Comedy">Comedy</option>
-                    <option value="Horror">Horror</option>
-                    <option value="Motivational">Motivational</option>
-                    <option value="Mystery">Mystery</option>
-                </select>
+            <!-- Trend Source -->
+            <label for="trend-source">Select Trend Source:</label>
+            <select id="trend-source">
+                <option value="google_trends">Google Trends</option>
+                <option value="tiktok_api">TikTok API</option>
+                <option value="reddit_api">Reddit API</option>
+            </select>
 
-                <!-- Tone -->
-                <label for="tone">Select Tone:</label>
-                <select id="tone" name="tone" required>
-                    <option value="Lighthearted">Lighthearted</option>
-                    <option value="Dark">Dark</option>
-                    <option value="Inspirational">Inspirational</option>
-                </select>
+            <!-- Genre -->
+            <label for="genre">Choose Genre:</label>
+            <select id="genre">
+                <option>Comedy</option>
+                <option>Horror</option>
+                <option>Motivational</option>
+                <option>Mystery</option>
+            </select>
 
-                <!-- Time Period -->
-                <label for="time-period">Time Period:</label>
-                <select id="time-period" name="timePeriod" required>
-                    <option value="Past">Past</option>
-                    <option value="Present">Present</option>
-                    <option value="Future">Future</option>
-                </select>
+            <!-- Tone -->
+            <label for="tone">Select Tone:</label>
+            <select id="tone">
+                <option>Lighthearted</option>
+                <option>Dark</option>
+                <option>Inspirational</option>
+            </select>
 
-                <!-- Duration -->
-                <label for="duration">Story Duration:</label>
-                <select id="duration" name="duration" required>
-                    <option value="15">15 seconds</option>
-                    <option value="30">30 seconds</option>
-                    <option value="60">1 minute</option>
-                </select>
+            <!-- Time Period -->
+            <label for="time-period">Time Period:</label>
+            <select id="time-period">
+                <option>Past</option>
+                <option>Present</option>
+                <option>Future</option>
+            </select>
 
-                <!-- Hashtag Option -->
-                <label for="hashtags">Include Hashtags:</label>
-                <input type="checkbox" id="hashtags" name="includeHashtags" checked>
+            <!-- Duration -->
+            <label for="duration">Story Duration:</label>
+            <select id="duration">
+                <option value="15">15 seconds</option>
+                <option value="30">30 seconds</option>
+                <option value="60">1 minute</option>
+            </select>
 
-                <!-- Generate Button -->
-                <button type="submit" id="generate-btn" aria-label="Generate Story">Generate Story</button>
-            </form>
-        </section>
+            <!-- Custom Input -->
+            <label for="custom-input">Custom Input (Optional):</label>
+            <input type="text" id="custom-input" placeholder="Enter keywords or specific instructions">
 
-        <!-- Story Display -->
+            <!-- Hashtag Option -->
+            <label>
+                <input type="checkbox" id="hashtags" checked>
+                Include Hashtags
+            </label>
+
+            <!-- Generate Button -->
+            <button id="generate-btn">Generate Story</button>
+        </div>
+
+        <!-- Story Result Display -->
         <section id="story-result" class="story-result">
             <h2>Your Generated Story</h2>
-            <div id="story-content"></div>
+            <div id="story-content">Your story will appear here...</div>
         </section>
     </main>
 
     <!-- JavaScript -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.getElementById("generate-btn").addEventListener("click", () => {
+            const trendSource = document.getElementById("trend-source").value;
+            const genre = document.getElementById("genre").value;
+            const tone = document.getElementById("tone").value;
+            const timePeriod = document.getElementById("time-period").value;
+            const duration = document.getElementById("duration").value;
+            const includeHashtags = document.getElementById("hashtags").checked;
+            const customInput = document.getElementById("custom-input").value;
+
+            // Send data to backend
+            fetch("/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    trendSource,
+                    genre,
+                    tone,
+                    timePeriod,
+                    duration,
+                    includeHashtags,
+                    customInput
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    document.getElementById("story-content").innerText = data.story;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    document.getElementById("story-content").innerText = "Failed to generate story. Try again!";
+                });
+        });
+    </script>
 </body>
 </html>
