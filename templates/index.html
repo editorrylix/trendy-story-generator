@@ -17,53 +17,55 @@
     <main>
         <section class="story-options">
             <h2>Customize Your Story</h2>
-            <!-- Trend Source -->
-            <label for="trend-source">Select Trend Source:</label>
-            <select id="trend-source">
-                <option>Google Trends</option>
-                <option>TikTok API</option>
-                <option>Reddit API</option>
-            </select>
+            <form id="story-form">
+                <!-- Trend Source -->
+                <label for="trend-source">Select Trend Source:</label>
+                <select id="trend-source" name="trendSource" required>
+                    <option value="google_trends">Google Trends</option>
+                    <option value="tiktok_api">TikTok API</option>
+                    <option value="reddit_api">Reddit API</option>
+                </select>
 
-            <!-- Genre -->
-            <label for="genre">Choose Genre:</label>
-            <select id="genre">
-                <option>Comedy</option>
-                <option>Horror</option>
-                <option>Motivational</option>
-                <option>Mystery</option>
-            </select>
+                <!-- Genre -->
+                <label for="genre">Choose Genre:</label>
+                <select id="genre" name="genre" required>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Motivational">Motivational</option>
+                    <option value="Mystery">Mystery</option>
+                </select>
 
-            <!-- Tone -->
-            <label for="tone">Select Tone:</label>
-            <select id="tone">
-                <option>Lighthearted</option>
-                <option>Dark</option>
-                <option>Inspirational</option>
-            </select>
+                <!-- Tone -->
+                <label for="tone">Select Tone:</label>
+                <select id="tone" name="tone" required>
+                    <option value="Lighthearted">Lighthearted</option>
+                    <option value="Dark">Dark</option>
+                    <option value="Inspirational">Inspirational</option>
+                </select>
 
-            <!-- Time Period -->
-            <label for="time-period">Time Period:</label>
-            <select id="time-period">
-                <option>Past</option>
-                <option>Present</option>
-                <option>Future</option>
-            </select>
+                <!-- Time Period -->
+                <label for="time-period">Time Period:</label>
+                <select id="time-period" name="timePeriod" required>
+                    <option value="Past">Past</option>
+                    <option value="Present">Present</option>
+                    <option value="Future">Future</option>
+                </select>
 
-            <!-- Duration -->
-            <label for="duration">Story Duration:</label>
-            <select id="duration">
-                <option value="15">15 seconds</option>
-                <option value="30">30 seconds</option>
-                <option value="60">1 minute</option>
-            </select>
+                <!-- Duration -->
+                <label for="duration">Story Duration:</label>
+                <select id="duration" name="duration" required>
+                    <option value="15">15 seconds</option>
+                    <option value="30">30 seconds</option>
+                    <option value="60">1 minute</option>
+                </select>
 
-            <!-- Hashtag Option -->
-            <label for="hashtags">Include Hashtags:</label>
-            <input type="checkbox" id="hashtags" checked>
+                <!-- Hashtag Option -->
+                <label for="hashtags">Include Hashtags:</label>
+                <input type="checkbox" id="hashtags" name="includeHashtags" checked>
 
-            <!-- Generate Button -->
-            <button id="generate-btn">Generate Story</button>
+                <!-- Generate Button -->
+                <button type="submit" id="generate-btn" aria-label="Generate Story">Generate Story</button>
+            </form>
         </section>
 
         <!-- Story Display -->
