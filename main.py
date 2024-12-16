@@ -5,106 +5,74 @@ import random
 app = Flask(__name__, template_folder="templates")
 
 # Configure Gemini API
-API_KEY = "YOUR_GEMINI_API_KEY"  # Replace with your API key
+API_KEY = "YOUR_GEMINI_API_KEY"
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("gemini-pro")  # Load Gemini Pro Model
 
-
-# ====================== HELPER FUNCTIONS ======================
-
+# Function to fetch trends
 def fetch_trends(source):
-    """
-    Simulates fetching trends based on the source.
-    Extend this function to integrate real APIs if needed.
-    """
-    trend_mapping = {
-        "google_trends": "AI in Tech",
-        "tiktok_api": "Dance Challenges",
-        "reddit_api": "Space Exploration Memes",
-    }
-    return trend_mapping.get(source, "A Viral Phenomenon")
+    if source == "google_trends":
+        return "AI in Tech"
+    elif source == "tiktok_api":
+        return "Dance Challenges"
+    elif source == "reddit_api":
+        return "Space Exploration Memes"
+    else:
+        return "A Viral Phenomenon"
 
-
-def build_prompt(trend, genre, tone, time_period, duration, include_hashtags):
-    """
-    Builds a structured prompt to send to the Gemini API.
-    """
+# Function to generate a story using Gemini API
+def generate_story_with_gemini(trend, genre, tone, time_period, duration, custom_input):
     prompt = (
-        f"Write a short, engaging story incorporating the following details:\n"
-        f"- **Trend**: {trend}\n"
-        f"- **Genre**: {genre} (Comedy, Horror, Motivational, Mystery, etc.)\n"
-        f"- **Tone**: {tone} (Lighthearted, Dark, Inspirational, etc.)\n"
-        f"- **Time Period**: {time_period} (Past, Present, Future)\n"
-        f"- **Duration**: Fit the story into {duration} seconds.\n"
-        f"Include visual elements like stock footages, sound effects, and timestamps for each scene to make it immersive.\n"
+        f"Write a short story incorporating the following elements:\n"
+        f"- Trend: {trend}\n"
+        f"- Genre: {genre} (e.g., Comedy, Horror, Motivational, Mystery, etc.)\n"
+        f"- Tone: {tone} (e.g., Lighthearted, Dark, Inspirational, etc.)\n"
+        f"- Time Period: {time_period} (e.g., Past, Present, Future)\n"
+        f"- Duration: The story should be concise and fit within {duration} seconds.\n"
+        f"- Custom Input: {custom_input}\n"  # Include user's custom input
+        f"Make the story engaging and creative while adhering to the trend and genre."
+        " Also include sound effects and visual elements (stock footage) required at each subtitle with video timestamps."
     )
-    if include_hashtags:
-        prompt += "Add relevant hashtags at the end for a social media audience."
-    return prompt
 
-
-def generate_story_with_gemini(prompt):
-    """
-    Generates content using the Gemini API based on the prompt.
-    """
+    # Call Gemini API
     try:
-        response = model.generate_content(prompt)
-        story = response.text.strip() if response and response.text else "No story generated."
+        response = genai.GenerativeModel("gemini-pro").generate_content(prompt)
+        story = response.text.strip() if response.text else "No story generated."
         return story
     except Exception as e:
         print(f"Error calling Gemini API: {e}")
         return "Error generating story with Gemini API."
 
-
-# ====================== ROUTES ======================
-
+# Route to render the form
 @app.route("/", methods=["GET"])
 def index():
-    """
-    Renders the main UI page.
-    """
     return render_template("index.html")
 
-
-@app.route("/generate", methods=["POST"])
+# Route to generate the story
+@app.route('/generate', methods=['POST'])
 def generate_story():
-    """
-    Generates a story based on user input and returns it as JSON.
-    """
     try:
-        # Parse input data from request
         data = request.get_json()
-        trend_source = data.get('trendSource')
-        genre = data.get('genre')
-        tone = data.get('tone')
-        time_period = data.get('timePeriod')
-        duration = data.get('duration')
-        include_hashtags = data.get('includeHashtags')
+        trend_source = data['trendSource']
+        genre = data['genre']
+        tone = data['tone']
+        time_period = data['timePeriod']
+        duration = data['duration']
+        include_hashtags = data.get('includeHashtags', False)
+        custom_input = data.get('customInput', "")  # User-specific input
 
         # Fetch trending topic
         trend = fetch_trends(trend_source)
 
-        # Build Gemini prompt
-        prompt = build_prompt(trend, genre, tone, time_period, duration, include_hashtags)
-
         # Generate story
-        story = generate_story_with_gemini(prompt)
+        story = generate_story_with_gemini(trend, genre, tone, time_period, duration, custom_input)
 
-        # Return response
-        return jsonify({
-            "story": story,
-            "trend": trend
-        })
+        # Add hashtags if selected
+        hashtags = f"\n#Trending #Viral #StoryTime #Fun" if include_hashtags else ""
 
+        return jsonify({'story': story + hashtags})
     except Exception as e:
-        print(f"Error generating story: {e}")
-        return jsonify({
-            "story": "Error generating story. Please try again.",
-            "trend": "N/A"
-        }), 500
-
-
-# ====================== MAIN ======================
+        print(f"Error: {e}")
+        return jsonify({"script": "Error generating story", "trend": "N/A"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
