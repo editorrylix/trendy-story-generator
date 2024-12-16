@@ -1,48 +1,35 @@
 from flask import Flask, render_template, request, jsonify
-import google.generativeai as genai  # Gemini API
-import random
+from pytrends.request import TrendReq
+import praw
 
 app = Flask(__name__, template_folder="templates")
 
-# Configure Gemini API
-API_KEY = "YOUR_GEMINI_API_KEY"
-genai.configure(api_key=API_KEY)
-
-# Function to fetch trends
-def fetch_trends(source):
-    if source == "google_trends":
-        return "AI in Tech"
-    elif source == "tiktok_api":
-        return "Dance Challenges"
-    elif source == "reddit_api":
-        return "Space Exploration Memes"
-    else:
-        return "A Viral Phenomenon"
-
-# Function to generate a story using Gemini API
-def generate_story_with_gemini(trend, genre, tone, time_period, duration, custom_input):
-    prompt = (
-        f"Write a short story incorporating the following elements:\n"
-        f"- Trend: {trend}\n"
-        f"- Genre: {genre} (e.g., Comedy, Horror, Motivational, Mystery, etc.)\n"
-        f"- Tone: {tone} (e.g., Lighthearted, Dark, Inspirational, etc.)\n"
-        f"- Time Period: {time_period} (e.g., Past, Present, Future)\n"
-        f"- Duration: The story should be concise and fit within {duration} seconds.\n"
-        f"- Custom Input: {custom_input}\n"  # Include user's custom input
-        f"Make the story engaging and creative while adhering to the trend and genre."
-        " Also include sound effects and visual elements (stock footage) required at each subtitle with video timestamps."
-    )
-
-    # Call Gemini API
+# Function to fetch Google Trends
+def fetch_google_trends():
     try:
-        response = genai.GenerativeModel("gemini-pro").generate_content(prompt)
-        story = response.text.strip() if response.text else "No story generated."
-        return story
+        pytrends = TrendReq(hl='en-US', tz=360)
+        trending = pytrends.trending_searches(pn='united_states')
+        return trending[0][0] if not trending.empty else "No trends found"
     except Exception as e:
-        print(f"Error calling Gemini API: {e}")
-        return "Error generating story with Gemini API."
+        print(f"Error fetching Google Trends: {e}")
+        return "Error fetching Google Trends"
 
-# Route to render the form
+# Function to fetch Reddit Trends
+def fetch_reddit_trends():
+    try:
+        reddit = praw.Reddit(
+            client_id="YOUR_REDDIT_CLIENT_ID",
+            client_secret="YOUR_REDDIT_CLIENT_SECRET",
+            user_agent="your_app_name"
+        )
+        hot_posts = reddit.subreddit("all").hot(limit=5)
+        trends = [post.title for post in hot_posts]
+        return trends[0] if trends else "No Reddit trends found"
+    except Exception as e:
+        print(f"Error fetching Reddit Trends: {e}")
+        return "Error fetching Reddit Trends"
+
+# Route to render the UI
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -53,26 +40,39 @@ def generate_story():
     try:
         data = request.get_json()
         trend_source = data['trendSource']
+        custom_keyword = data.get('customKeyword', '')
         genre = data['genre']
         tone = data['tone']
         time_period = data['timePeriod']
         duration = data['duration']
-        include_hashtags = data.get('includeHashtags', False)
-        custom_input = data.get('customInput', "")  # User-specific input
+        include_hashtags = data['includeHashtags']
 
-        # Fetch trending topic
-        trend = fetch_trends(trend_source)
+        # Fetch the trend
+        if trend_source == "google_trends":
+            trend = fetch_google_trends()
+        elif trend_source == "reddit_api":
+            trend = fetch_reddit_trends()
+        elif trend_source == "custom_input":
+            trend = custom_keyword if custom_keyword else "Custom trend not provided"
+        else:
+            trend = "Unknown source"
 
-        # Generate story
-        story = generate_story_with_gemini(trend, genre, tone, time_period, duration, custom_input)
+        # Prepare story prompt
+        prompt = (
+            f"Write a {duration}-second {genre} story in a {tone} tone, "
+            f"set in the {time_period}, based on the trend: {trend}."
+        )
+        if include_hashtags:
+            prompt += " Add relevant hashtags at the end."
 
-        # Add hashtags if selected
-        hashtags = f"\n#Trending #Viral #StoryTime #Fun" if include_hashtags else ""
+        # Dummy response (replace this with Gemini API call if needed)
+        story = f"Generated story based on trend: {trend}."
 
-        return jsonify({'story': story + hashtags})
+        return jsonify({'story': story})
+
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"script": "Error generating story", "trend": "N/A"}), 500
+        return jsonify({"story": "Error generating story", "trend": "N/A"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
