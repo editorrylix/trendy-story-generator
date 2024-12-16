@@ -47,23 +47,27 @@ def index():
     return render_template("index.html")
 
 # Route to generate the story
-@app.route("/generate", methods=["POST"])
-def generate():
-    try:
-        # Extract form data
-        source = request.form.get("trend_source")
-        genre = request.form.get("genre", "General")
-        tone = request.form.get("tone", "Neutral")
-        time_period = request.form.get("time_period", "Present")
-        duration = request.form.get("duration", "30 seconds")
+@app.route('/generate', methods=['POST'])
+def generate_story():
+    data = request.get_json()
+    trend_source = data['trendSource']
+    genre = data['genre']
+    tone = data['tone']
+    time_period = data['timePeriod']
+    duration = data['duration']
+    include_hashtags = data['includeHashtags']
 
-        # Fetch trend
-        trend = fetch_trends(source) or "A Viral Phenomenon"
+    # Prepare AI prompt
+    prompt = f"Write a {duration}-second {genre} story in a {tone} tone, set in the {time_period}, based on {trend_source} trends."
+    if include_hashtags:
+        prompt += " Add some relevant hashtags at the end."
 
-        # Generate story
-        story = generate_story_with_gemini(trend, genre, tone, time_period, duration)
+    # Generate story using Gemini API
+    response = model.generate_content(prompt)
+    story = response.text
 
-        return jsonify({"script": story, "trend": trend})
+    return jsonify({'story': story})
+
 
     except Exception as e:
         print(f"Error: {e}")
