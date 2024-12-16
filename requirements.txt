@@ -2,3 +2,4 @@ Flask
 pytrends
 requests
 google-generativeai
+praw
