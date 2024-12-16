@@ -100,5 +100,5 @@ This project is licensed under the MIT License.
 ---
 
 ## 📡 **Connect with Us**
-- GitHub: [Your GitHub Profile](https://github.com/your-username)
-- Email: your-email@example.com
+- GitHub: [GitHub Profile](https://github.com/editorrylix)
+- Email: Available Soon
