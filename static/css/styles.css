@@ -1,30 +1,68 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
-    text-align: center;
+    font-family: 'Arial', sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
 }
 
-form {
-    background-color: #fff;
+header {
+    background-color: #4CAF50;
+    color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: inline-block;
+    text-align: center;
 }
 
-label, select, button {
-    display: block;
+.logo {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+h1, h2 {
     margin: 10px 0;
 }
 
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+select, input[type="checkbox"], button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
 button {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    padding: 10px 20px;
     cursor: pointer;
-    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.story-result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
