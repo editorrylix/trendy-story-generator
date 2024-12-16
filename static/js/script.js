@@ -1,35 +1,34 @@
-document.getElementById('generate-btn').addEventListener('click', async () => {
-    const trendSource = document.getElementById('trend-source').value;
-    const genre = document.getElementById('genre').value;
-    const tone = document.getElementById('tone').value;
-    const timePeriod = document.getElementById('time-period').value;
-    const duration = document.getElementById('duration').value;
-    const includeHashtags = document.getElementById('hashtags').checked;
+document.getElementById("story-form").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-    // Prepare the request payload
-    const payload = {
-        trendSource,
-        genre,
-        tone,
-        timePeriod,
-        duration,
-        includeHashtags
-    };
+    // Collect form data
+    const trendSource = document.getElementById("trend-source").value;
+    const genre = document.getElementById("genre").value;
+    const tone = document.getElementById("tone").value;
+    const timePeriod = document.getElementById("time-period").value;
+    const duration = document.getElementById("duration").value;
+    const includeHashtags = document.getElementById("hashtags").checked;
+    const customInput = document.getElementById("custom-input").value; // Custom input field
 
-    // Call the backend API
-    const response = await fetch('/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
-
-    // Display the result
-    if (response.ok) {
-        const data = await response.json();
-        document.getElementById('story-content').innerHTML = `<p>${data.story}</p>`;
-    } else {
-        document.getElementById('story-content').innerHTML = '<p>Error generating story. Try again!</p>';
-    }
+    // Send data to backend
+    fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            trendSource,
+            genre,
+            tone,
+            timePeriod,
+            duration,
+            includeHashtags,
+            customInput,  // Include custom input
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            document.getElementById("story-content").innerText = data.story;
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
 });
