@@ -1,6 +1,3 @@
-Here’s the corrected, properly formatted and updated `README.md` with all content presented clearly:
-
-
 # Trend-Based Story Generator
 
 ## ✨ **Overview**
@@ -105,4 +102,4 @@ This project is licensed under the MIT License.
 ## 📡 **Connect with Us**
 - GitHub: [GitHub Profile](https://github.com/editorrylix)
 - Email: Available Soon
-```
+
