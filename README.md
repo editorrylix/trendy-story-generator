@@ -1,11 +1,14 @@
+Here’s the corrected, properly formatted and updated `README.md` with all content presented clearly:
+
+```markdown
 # Trend-Based Story Generator
 
 ## ✨ **Overview**
-The **Trend-Based Story Generator** is an innovative web application that dynamically creates engaging, short stories based on viral trends. Leveraging APIs like **Google Trends, TikTok API,** and **Reddit**, it generates trend-driven narratives tailored to your selected **genre, tone, time period,** and **story duration**. The backend integrates **Google's Gemini AI** to ensure every generated story is creative, concise, and share-worthy!
+The **Trend-Based Story Generator** is an innovative web application that dynamically creates engaging, short stories based on viral trends. Leveraging APIs like **Google Trends** and **Reddit**, it generates trend-driven narratives tailored to your selected **genre, tone, time period,** and **story duration**. The backend integrates **Google's Gemini AI** to ensure every generated story is creative, concise, and share-worthy!
 
 ## 🔧 **Key Features**
 1. **Dynamic Story Generation**
-   - Select your preferred trend source: Google Trends, TikTok API, or Reddit API.
+   - Select your preferred trend source: Google Trends or Reddit API.
    - Customize the story with parameters:
      - **Genre**: Comedy, Horror, Motivational, Mystery.
      - **Tone**: Lighthearted, Dark, Inspirational.
@@ -46,8 +49,9 @@ Follow these steps to set up the project locally:
    pip install flask google-generativeai
    ```
 
-3. **Configure API Key**
+3. **Configure API Keys**
    - Replace `YOUR_GEMINI_API_KEY` in `main.py` with your Gemini API key.
+   - Add your **Reddit API credentials** to the `fetch_reddit_trends` function.
 
 4. **Run the Application**
    ```bash
@@ -62,13 +66,12 @@ Follow these steps to set up the project locally:
 Trend-Based Story Generator | Viral Short Stories with AI
 
 ### **Meta Description**:
-Generate viral short stories based on the latest trends from Google, TikTok, and Reddit. Customize genre, tone, and duration for engaging, AI-powered narratives.
+Generate viral short stories based on the latest trends from Google and Reddit. Customize genre, tone, and duration for engaging, AI-powered narratives.
 
 ### **Keywords**:
 - AI Story Generator
 - Viral Story Generator
 - Google Trends Stories
-- TikTok API Short Stories
 - Reddit Story Creator
 - Gemini AI Story App
 - Short Story Generator
@@ -102,3 +105,4 @@ This project is licensed under the MIT License.
 ## 📡 **Connect with Us**
 - GitHub: [GitHub Profile](https://github.com/editorrylix)
 - Email: Available Soon
+```
