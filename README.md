@@ -1,6 +1,6 @@
 Here’s the corrected, properly formatted and updated `README.md` with all content presented clearly:
 
-```markdown
+
 # Trend-Based Story Generator
 
 ## ✨ **Overview**
