@@ -2,20 +2,18 @@ from flask import Flask, render_template, request, jsonify
 from pytrends.request import TrendReq
 import praw
 
-app = Flask(__name__, template_folder="templates")
-
-# Function to fetch Google Trends
+# Function to fetch Google Trends (replace with actual API call if needed)
 def fetch_google_trends():
-  try:
-    pytrends = TrendReq(hl='en-US', tz=360)
-    trending = pytrends.trending_searches(pn='united_states')
-    return trending[0][0] if not trending.empty else "No trends found"
-  except pytrends.exceptions.RequestError as e:
-    print(f"Error fetching Google Trends: {e} (Likely API Key issue)")
-    return "Error fetching Google Trends"
-  except Exception as e:
-    print(f"Unexpected Error fetching Google Trends: {e}")
-    return "Error fetching Google Trends"
+    try:
+        pytrends = TrendReq(hl='en-US', tz=360)
+        trending = pytrends.trending_searches(pn='united_states')
+        return trending[0][0] if not trending.empty else "No trends found"
+    except pytrends.exceptions.RequestError as e:
+        print(f"Error fetching Google Trends: {e} (Likely API Key issue)")
+        return "Error fetching Google Trends"
+    except Exception as e:
+        print(f"Unexpected Error fetching Google Trends: {e}")
+        return "Error fetching Google Trends"
 
 # Function to fetch Reddit Trends
 def fetch_reddit_trends():
@@ -68,8 +66,8 @@ def generate_story():
         if include_hashtags:
             prompt += " Add relevant hashtags at the end."
 
-        # Dummy response (replace this with Gemini API call if needed)
-        story = f"Generated story based on trend: {trend}."
+        # Replace this with actual story generation logic using an API or service
+        story = f"Story based on trend: {trend} (Replace this with actual story generation)"
 
         return jsonify({'story': story})
 
