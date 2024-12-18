@@ -6,13 +6,16 @@ app = Flask(__name__, template_folder="templates")
 
 # Function to fetch Google Trends
 def fetch_google_trends():
-    try:
-        pytrends = TrendReq(hl='en-US', tz=360)
-        trending = pytrends.trending_searches(pn='united_states')
-        return trending[0][0] if not trending.empty else "No trends found"
-    except Exception as e:
-        print(f"Error fetching Google Trends: {e}")
-        return "Error fetching Google Trends"
+  try:
+    pytrends = TrendReq(hl='en-US', tz=360)
+    trending = pytrends.trending_searches(pn='united_states')
+    return trending[0][0] if not trending.empty else "No trends found"
+  except pytrends.exceptions.RequestError as e:
+    print(f"Error fetching Google Trends: {e} (Likely API Key issue)")
+    return "Error fetching Google Trends"
+  except Exception as e:
+    print(f"Unexpected Error fetching Google Trends: {e}")
+    return "Error fetching Google Trends"
 
 # Function to fetch Reddit Trends
 def fetch_reddit_trends():
